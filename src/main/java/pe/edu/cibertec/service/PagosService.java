@@ -18,7 +18,9 @@ public class PagosService {
 		repositorio.save(m);
 	}
 	
-	 public List<Pagos> buscarCronogramaPorPrestatario(Integer cod) {
-			return repositorio.buscarCronogramaPorPrestatario(cod);
+	 public List<Pagos> buscarCronogramaPorPrestatario(Integer cod,int idSoli) {
+			return repositorio.buscarCronogramaPorPrestatario(cod,idSoli);
 		}
+	 
+	 
 }

@@ -124,13 +124,13 @@
 	<div th:replace="~{nav :: cabecera}"></div>
 
 
-	<div class="container">
+	<div class="container" style="margin-top: 80px ; margin-bottom: 100px;">
 		<form id="form" th:action="@{grabarPrestatario}" method="POST">
 
 
 			<div class="row">
+				
 				<div class="form-group has-feedback col-md-12">
-					<label for="exampleInputEmail1"><b>Codigo</b></label><br>
 					<input type="hidden" id="idCodigo" class="form-control" name="id" value="0">
 				</div>
 				<div class="row mb-4">
@@ -235,7 +235,7 @@
 
 		<div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
 			© 2024 Copyright:
-			<a class="text-reset fw-bold" href="https://mdbootstrap.com/">PROYECTO INTEGRADOR</a>
+			<a class="text-reset fw-bold" href="https://mdbootstrap.com/">PROYECTO LP2</a>
 		</div>
 		<!-- Copyright -->
 	</footer>

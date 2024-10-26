@@ -19,7 +19,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	@Query("select u from Usuario u where u.rol.codigo=?1 ")
 	public List<Usuario> listarUsuarioporRol(int codRol);
 	
-	@Query("select u from Usuario u where u.sector.idsectorsuperior=?1 ")
+	@Query("select u from Usuario u where u.sector.idsectorsuperior=?1 and u.rol.codigo=3 ")
 	public List<Usuario> listaUsuarioPorSectorGrande(int cod);
 	
 	@Query("select u from Usuario u where u.sector.id=?1 and u.rol.codigo=4 ")

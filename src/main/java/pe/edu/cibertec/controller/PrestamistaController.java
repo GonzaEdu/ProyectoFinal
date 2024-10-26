@@ -30,6 +30,7 @@ import pe.edu.cibertec.entity.Enlace;
 import pe.edu.cibertec.entity.Pagos;
 import pe.edu.cibertec.entity.Rol;
 import pe.edu.cibertec.entity.Sector;
+import pe.edu.cibertec.entity.Solicitud;
 import pe.edu.cibertec.entity.Usuario;
 import pe.edu.cibertec.service.PagosService;
 import pe.edu.cibertec.service.RolService;
@@ -42,6 +43,7 @@ import pe.edu.cibertec.service.UsuarioService;
 @SessionAttributes({"ENLACES","DATOSDELUSUARIO","IDUSUARIO","IDSECTORUSUARIO"})
 
 public class PrestamistaController {
+	
 	@Autowired
 	private UsuarioService servicioUsu;
 	
@@ -50,6 +52,7 @@ public class PrestamistaController {
 	
 	@Autowired
 	private PagosService pagosservice;
+	
 	@Autowired
 	private RolService servicioRol;
 	@Autowired
@@ -89,6 +92,8 @@ public class PrestamistaController {
 		
 		return "listarPrestatarios";
 	}
+	
+	
 	@RequestMapping("/grabarPrestatario")
 	public ResponseEntity<String>  grabarPrestatarios(Model model,
 						 @RequestParam("id") Integer id,
@@ -120,8 +125,9 @@ public class PrestamistaController {
 			usu.setEmail(ema);
 			usu.setTelefono(tel);
 			usu.setUsername(use);
+			usu.setDni(dni);
 			usu.setIdUsuarioRegistra((Integer) model.getAttribute("IDUSUARIO"));
-
+			
 			
 			Usuario usuejemplo =servicioUsu.buscarPorID((Integer) model.getAttribute("IDUSUARIO"));
 			int idsectorejemplo = usuejemplo.getSector().getId();
@@ -153,6 +159,60 @@ public class PrestamistaController {
 			e.printStackTrace();
 		}
 		return ResponseEntity.ok("Usuario registrado exitosamente");
+	}
+	
+	@RequestMapping("/actualizarPrestatario")
+	public String  actualizarPrestatario(Model model,
+						 @RequestParam("id") Integer id,
+						 @Valid@RequestParam("nombre") String nom,
+						 @Valid@RequestParam("apellido") String ape,
+						 @Valid@RequestParam("email") String ema,
+						 @Valid@RequestParam("dni") String dni,
+						 @Valid@RequestParam("telefono") String tel,
+						 @Valid@RequestParam("username") String use,
+						 @Valid@RequestParam("password") String pas,
+						 RedirectAttributes redirect,HttpServletRequest request) {		
+		try {
+			String var;
+			var = encoder.encode(pas);
+			Usuario usu=new Usuario();
+			
+			
+			usu.setNombre(nom);
+			usu.setApellido(ape);
+			usu.setEmail(ema);
+			usu.setTelefono(tel);
+			usu.setUsername(use);
+			usu.setDni(dni);
+			usu.setIdUsuarioRegistra((Integer) model.getAttribute("IDUSUARIO"));
+			
+			
+			Usuario usuejemplo =servicioUsu.buscarPorID((Integer) model.getAttribute("IDUSUARIO"));
+			int idsectorejemplo = usuejemplo.getSector().getId();
+		            Sector sector = new Sector();
+		            sector.setId(idsectorejemplo);
+		            
+		            usu.setSector(sector);
+		       
+
+			Rol r=new Rol();
+			r.setCodigo(4);
+			usu.setRol(r);
+			
+			
+				usu.setId(id);
+				usu.setPassword(pas);
+				servicioUsu.actualizar(usu);
+				redirect.addFlashAttribute("MENSAJE","Prestatario actualizado");
+			
+			
+			redirect.addFlashAttribute("MENSAJE","Prestatario registrado");
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  "redirect:/prestamista/listarPrestatarios";
 	}
 	
 	@ModelAttribute("sectores")
@@ -190,7 +250,7 @@ public class PrestamistaController {
 		Usuario usuejemplo =servicioUsu.buscarPorID((Integer) model.getAttribute("IDUSUARIO"));
 		int idsectorejemplo = usuejemplo.getSector().getId();
 		
-		model.addAttribute("Solicitudes",servicioSol.listaSolicitudesPorPrestatariosdePrestamista(idsectorejemplo));
+		model.addAttribute("Solicitudes",servicioSol.listaSolicitudesPorPrestatariosdePrestamista(idsectorejemplo,usuejemplo.getId()));
 
 		return "listarSolicitudes";
 	}
@@ -202,6 +262,7 @@ public class PrestamistaController {
 	        @RequestParam("idusu") String idusu,
 	        @RequestParam("fec1") String fec1Str,
 	        @RequestParam("fec2") String fec2Str,
+	        @RequestParam("idsoli") String idsoli,
 	        RedirectAttributes redirect) {
 
 	    // Convertir las cadenas de fecha a objetos LocalDate
@@ -217,7 +278,10 @@ public class PrestamistaController {
 	            pagosin.setMontodiario(Double.parseDouble(monto));
 	            pagosin.setEstado("Pendiente");
 	            pagosin.setFecha(Date.from(fechaPago.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
+	            Solicitud soli = new Solicitud ();
+	            soli.setId(Integer.parseInt(idsoli));
+	            pagosin.setSolicitud(soli);
+	            
 	            Usuario usu = new Usuario();
 	            usu.setId(Integer.parseInt(idusu));
 	            pagosin.setUsuario(usu);

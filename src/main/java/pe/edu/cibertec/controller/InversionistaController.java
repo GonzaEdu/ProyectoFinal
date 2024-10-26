@@ -143,6 +143,72 @@ public class InversionistaController {
 						}
 						return ResponseEntity.ok("Usuario registrado exitosamente");
 		}
+		
+		@RequestMapping("/actualizarJefe")
+		public String actualizarJefe(
+				 @RequestParam("id") Integer id,
+				 @Valid@RequestParam("nombre") String nom,
+				 @Valid@RequestParam("apellido") String ape,
+				 @Valid@RequestParam("email") String ema,
+				 @Valid@RequestParam("telefono") String tel,
+				 @Valid@RequestParam("username") String use,
+				 @Valid@RequestParam("password") String pas,
+				 @Valid@RequestParam("dni") String dni,
+				 @Valid@RequestParam("sector") int sectorId,
+				 RedirectAttributes redirect,HttpServletRequest request,Authentication auth) {
+						try {
+							// Obtener el usuario autenticado desde el objeto Authentication
+							UserDetails userDetails = (UserDetails) auth.getPrincipal();
+							String username = userDetails.getUsername();
+
+							// Utilizar el servicio de Usuario para obtener el usuario por nombre de usuario
+							Usuario usuario = servicioUsu.sesionUsuario(username);
+
+							String var;
+							var = encoder.encode(pas);
+							Usuario usu=new Usuario();
+							
+							
+								usu.setNombre(nom);
+								usu.setApellido(ape);
+								usu.setEmail(ema);
+								usu.setTelefono(tel);
+								usu.setUsername(use);
+								usu.setDni(dni);
+								
+							
+								Sector sector = new Sector();
+						        sector.setId(sectorId);
+						        usu.setSector(sector);
+						        
+								Rol r=new Rol();
+								r.setCodigo(2);
+								usu.setRol(r);
+
+								//Sector sector=new Sector();
+								//sector.setId(1);
+								//usu.setSector(sector);
+								usu.setIdUsuarioRegistra(usuario.getId());
+
+								
+								
+									usu.setId(id);
+									usu.setPassword(pas);
+									servicioUsu.actualizar(usu);
+									redirect.addFlashAttribute("MENSAJE","Jefe Prestamista actualizado");
+								
+								
+								
+							
+							
+							
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return "redirect:/inversionista/listaJefe";
+		}
+		
 		@ModelAttribute("sectores")
 		public List<Sector> getSector(){
 			List<Sector> listaSector = sectorService.listaSectorParaJefe();
@@ -176,7 +242,7 @@ public class InversionistaController {
 		            e.printStackTrace();
 		            redirect.addFlashAttribute("ERROR", "Error al eliminar el usuario");
 		        }		
-			 return "redirect:/sesion/principal";
+			 return "redirect:/inversionista/listaJefe";
 		}
 	
 	

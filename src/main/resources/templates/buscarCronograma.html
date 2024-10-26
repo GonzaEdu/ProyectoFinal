@@ -138,67 +138,66 @@
         display: block;
     }
 	</style>
+	
+	
 </head>
-<body>
-<div th:replace="~{nav :: cabecera}"></div>
+<body><div th:replace="~{nav :: cabecera}"></div>
 <div class="container">
+    <h3 class="text-center mt-4">MIS CRONOGRAMAS</h3>
 
-	<h3 class="text-center mt-4">SOLICITUDES DE PRESTATARIOS</h3>
+	<div class="mt-2">
+	      <div class="form-group">
+	          <label for="filtroSolicitudes">Solicitudes Aprobadas</label>
+	          <div class="d-flex align-items-start">
+	              <select class="form-control mr-2" id="filtroSolicitudes">
+	                  <option th:each="solicitud : ${solicitudesAprobadas}" th:text="'Solicitud con id: ' + ${solicitud.id}" th:value="${solicitud.id}"></option>
+	              </select>
+	              <a id="btn-buscar" href="#" class="btn btn-info">BUSCAR</a>
+	          </div>
+	      </div>
 
-
-	<div class=" mt-2">
-		<table class="table  border-secondary" id="tabla">
-			<thead class="table ">
-			<tr>
-				<th scope="col">Id</th>
-				<th scope="col">Monto Diario</th>
-				<th scope="col">Estado</th>
-				<th scope="col">Fecha </th>
-				<th scope="col">Usuario</th>
-
-				<th scope="col"></th>
-				<th scope="col"></th>
-
-			</tr>
-			</thead>
-			<tbody>
-
-			<tr th:each="row:${Pagos}">
-				<td th:text="${row.codigo}"></td>
-				<td th:text="${row.montodiario}"></td>
-				<td th:text="${row.estado}"></td>
-				<td th:text="${row.fecha}"></td>
-				<td th:text="${row.usuario.nombre}"></td>
-
-
-		
-
-			<tbody>
-		</table>
-	</div>
-
-
-
-
+        <table class="table border-secondary" id="tabla">
+            <thead class="table">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Monto Diario</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Solicitud</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Cuerpo de la tabla generado dinámicamente con Thymeleaf -->
+            <tr th:each="row:${Pagos}">
+                <td th:text="${row.codigo}"></td>
+                <td th:text="${row.montodiario}"></td>
+                <td th:text="${row.estado}"></td>
+                <td th:text="${row.fecha}"></td>
+                <td th:text="${row.usuario.nombre}"></td>
+                <td th:text="${row.solicitud.id}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
 <script th:src="@{/resources/datepicker/bootstrap-datepicker.js}"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://kit.fontawesome.com/08aaa156fb.js" crossorigin="anonymous"></script>
-<script	src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="https://kit.fontawesome.com/08aaa156fb.js" crossorigin="anonymous"></script>
-
 
 <script>
-
-	$(document).on("click",".btn-editar",function(){
+    $(document).on("click", ".btn-editar", function() {
         var cod;
-        cod=$(this).parents("tr").find("td")[0].innerHTML;
-        $.get("consultaPorID?id="+cod,function(response){
-
+        cod = $(this).parents("tr").find("td")[0].innerHTML;
+        $.get("consultaPorID?id=" + cod, function(response) {
             $("#idCodigo").val(response.id);
             $("#idNombre").val(response.nombre);
             $("#idApellido").val(response.apellido);
@@ -207,16 +206,26 @@
             $("#idUsuario").val(response.username);
             $("#idContraseña").val(response.password);
         })
-    })
+    });
 
-
-            $(document).on("click","#btn-cerrar",function(){
-                $("#idRegistra").trigger("reset");
-                $("#idRegistra").data("bootstrapValidator").resetForm(true);
-
-
-            })
+    $(document).on("click", "#btn-cerrar", function() {
+        $("#idRegistra").trigger("reset");
+        $("#idRegistra").data("bootstrapValidator").resetForm(true);
+    });
 </script>
-
+<script>
+    $(document).ready(function() {
+        $('#btn-buscar').click(function(e) {
+            e.preventDefault();
+            var solicitudId = $('#filtroSolicitudes').val();
+            if (solicitudId) {
+                window.location.href = '/prestatario/buscarCronogramaAprobado?solicitud=' + solicitudId;
+            } else {
+                // Manejar caso donde no se selecciona ninguna solicitud
+                alert('Por favor seleccione una solicitud');
+            }
+        });
+    });
+</script>
 </body>
 </html>

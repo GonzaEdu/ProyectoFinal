@@ -204,7 +204,7 @@
 						<td th:text="${row.rol.descripcion}"></td>
 						<td th:text="${row.sector.nombre}"></td>
 
-						<td> <a th:href="@{/sesion/eliminarPorID(codigo=${row.id})}" class="btn btn-danger btn-eliminar"
+						<td> <a th:href="@{/jefe/eliminarPorID(codigo=${row.id})}" class="btn btn-danger btn-eliminar"
 								onclick="return confirm('¿Está seguro que desea eliminar este usuario?');"><i
 									class="far fa-trash-alt"></i></a> </td>
 						<td><a class="btn btn-info btn-editar" data-toggle="modal" data-target="#modalPrestamista"
@@ -223,7 +223,7 @@
 					</div>
 					<div class="modal-body">
 
-						<form method="POST" id="idRegistra" th:action="@{grabarJefe}">
+						<form method="POST" id="idRegistra" th:action="@{actualizarJefe}">
 
 							<div class="container">
 								<div class="row">

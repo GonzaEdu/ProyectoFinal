@@ -36,13 +36,25 @@ public class Pagos {
 	    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd" , timezone = "America/Lima")
 	    @Column(name = "fecha")
 	    private Date fecha;
+	 
 	 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "idusuario_usuario")
 	    private Usuario usuario;
 	 
+	 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	    @ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "idsolicitud_solicitud")
+	    private Solicitud solicitud;
+	 
 	public int getCodigo() {
 		return codigo;
+	}
+	public Solicitud getSolicitud() {
+		return solicitud;
+	}
+	public void setSolicitud(Solicitud solicitud) {
+		this.solicitud = solicitud;
 	}
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;

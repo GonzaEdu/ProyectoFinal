@@ -185,7 +185,7 @@
 						<td th:text="${row.sector.nombre}"></td>
 						<td> <a th:href="@{/sesion/eliminarPorID(codigo=${row.id})}" class="btn btn-danger btn-eliminar"
 								onclick="return confirm('¿Está seguro que desea eliminar este usuario?');"><i
-									class="far fa-trash-alt">Eliminar</i></a> </td>
+									class="far fa-trash-alt"></i></a> </td>
 						<td><a class="btn btn-info btn-editar" data-toggle="modal" data-target="#modalPrestamista"
 								id="btn-editar"><i class="far fa-edit"></i></a></td>
 
@@ -205,7 +205,7 @@
 					</div>
 					<div class="modal-body">
 
-						<form method="POST" id="idRegistra" th:action="@{grabarPrestatario}">
+						<form method="POST" id="idRegistra" th:action="@{actualizarPrestatario}">
 
 							<div class="container">
 								<div class="row">
@@ -238,6 +238,12 @@
 									</div>
 
 									<div class="form-group has-feedback col-md-4">
+										<label for="exampleInputEmail1"><b>DNI</b></label><br>
+										<i class="fas fa-money-check-alt form-control-feedback2"></i>
+										<input type="text" class="form-control" id="idDni"
+										placeholder="Ingresar Dni" name="dni">
+									</div>
+									<div class="form-group has-feedback col-md-4">
 										<label for="exampleInputEmail1"><b>Usuario</b></label><br>
 										<i class="fas fa-money-check-alt form-control-feedback2"></i>
 										<input type="text" class="form-control" id="idUsuario"
@@ -250,13 +256,13 @@
 									</div>
 
 									<div class="form-group has-feedback col-md-4">
-										<label for="sector">Sector:</label>
-										<select id="sector" name="sector" required>
-
-											<option th:each="sector : ${sectores}" th:text="${sector.nombre}"
-												th:value="${sector.id}">
-											</option>
-										</select>
+										
+										
+										
+										<div class="form-group has-feedback col-md-12">
+										<input type="hidden" id="idsector" class="idCodigo form-control" name="idsector">
+										</div>
+										
 									</div>
 
 								</div>
@@ -301,6 +307,10 @@
 				$("#idTelefono").val(response.telefono);
 				$("#idUsuario").val(response.username);
 				$("#idContraseña").val(response.password);
+				$("#idsector").val(response.sector.id);
+				$("#idDni").val(response.dni);
+
+				
 			})
 		})
 		

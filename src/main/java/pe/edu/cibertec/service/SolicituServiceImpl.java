@@ -17,8 +17,8 @@ public class SolicituServiceImpl {
         repository.save(m);
     }
     
-    public List<Solicitud> listaSolicitudesPorPrestatariosdePrestamista(Integer cod) {
-		return repository.listaSolicitudesPorSector(cod);
+    public List<Solicitud> listaSolicitudesPorPrestatariosdePrestamista(Integer cod, int usuRegistra) {
+		return repository.listaSolicitudesPorSector(cod,usuRegistra);
 	}
 
     public void aprobarSolicitud(int cod) {
@@ -33,5 +33,7 @@ public class SolicituServiceImpl {
 		repository.actualizarSolicitudDesaprobado(cod);
 	}
   
-    
+    public List<Solicitud> listaSolicitudesAprobadasPorUsuario(Integer cod) {
+  		return repository.solicitudesaprobadas(cod);
+  	}
 }

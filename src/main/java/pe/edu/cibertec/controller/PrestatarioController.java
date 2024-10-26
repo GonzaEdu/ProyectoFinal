@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -91,6 +92,7 @@ public class PrestatarioController {
 			solicitud.setFechaFin(fechaf);
 			solicitud.setEstado("SOLICITADO");
 			solicitud.setPagoDiario(pagod);
+			solicitud.setPeriodo("DIARIO");
 			//solicitud.setPeriodo(periodo);
 
 			// Establecer el usuario en la solicitud
@@ -131,14 +133,44 @@ public class PrestatarioController {
 		return "verSolicitudes";
 	}
 	
+	
 	@RequestMapping("/buscarCronograma")
-	public String buscarCronograma(Model model) {
+	public String verCronograma(Model model) {
 		
-		int id = (int) model.getAttribute("IDUSUARIO");
-		model.addAttribute("Pagos",servicepagos.buscarCronogramaPorPrestatario(id));
 		
+		
+
 
 		return "buscarCronograma";
 	}
+	
+	@RequestMapping("/buscarCronogramaAprobado")
+	public String buscarCronograma(@RequestParam("solicitud") int soli,
+									Model model) {
+		
+		int id = (int) model.getAttribute("IDUSUARIO");
+		
+	
+			model.addAttribute("Pagos",servicepagos.buscarCronogramaPorPrestatario(id,soli));
+		
+		
+
+
+		return "buscarCronograma";
+	}
+	
+	@ModelAttribute("solicitudesAprobadas")
+	public List<Solicitud> getSolicitud(Model model){
+		
+		int id = (int) model.getAttribute("IDUSUARIO");
+
+		
+		List<Solicitud> listaSolicitudes = serviceSolicitud.listaSolicitudesAprobadasPorUsuario(id);
+		return listaSolicitudes;
+	}
+	
+	
+	
+	
 	
 }

@@ -130,6 +130,58 @@ public class JefeController {
 		}
 		return ResponseEntity.ok("Usuario registrado exitosamente");
 	}
+	
+	@RequestMapping("/actualizarPrestamista")
+	public String actualizarPrestamista(
+						 @RequestParam("id") Integer id,
+						 @Valid@RequestParam("nombre") String nom,
+						 @Valid@RequestParam("apellido") String ape,
+						 @Valid@RequestParam("email") String ema,
+						 @Valid@RequestParam("telefono") String tel,
+						 @Valid@RequestParam("username") String use,
+						 @Valid@RequestParam("password") String pas,
+						 @Valid@RequestParam("dni") String dni,
+						 @Valid@RequestParam("sector") int sectorId,
+						 RedirectAttributes redirect,HttpServletRequest request) {		
+		try {
+			
+			String var;
+			var = encoder.encode(pas);
+			Usuario usu=new Usuario();
+			
+			
+				usu.setNombre(nom);
+				usu.setApellido(ape);
+				usu.setEmail(ema);
+				usu.setTelefono(tel);
+				usu.setUsername(use);
+				usu.setDni(dni);
+				
+				Sector sector = new Sector();
+		        sector.setId(sectorId);
+		        usu.setSector(sector);
+
+				Rol r=new Rol();
+				r.setCodigo(3);
+				usu.setRol(r);
+				if(id ==0) {
+					usu.setPassword(var);
+					servicioUsu.registrar(usu);
+					redirect.addFlashAttribute("MENSAJE","Medicamento registrado");
+				}
+				else {
+					usu.setId(id);
+					usu.setPassword(pas);
+					servicioUsu.actualizar(usu);
+					redirect.addFlashAttribute("MENSAJE","Medicamento actualizado");
+				}
+				
+				redirect.addFlashAttribute("MENSAJE","Prestamista registrado");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/jefe/listarPrestamista";
+	}
 
 	
 	@ModelAttribute("sectores")
@@ -172,7 +224,7 @@ public class JefeController {
 	            e.printStackTrace();
 	            redirect.addFlashAttribute("ERROR", "Error al eliminar el usuario");
 	        }		
-		 return "redirect:/sesion/principal";
+		 return "redirect:/jefe/listarPrestamista";
 	}
 	
 	

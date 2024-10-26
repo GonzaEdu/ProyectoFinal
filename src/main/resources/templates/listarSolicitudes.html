@@ -183,7 +183,10 @@
 				<td th:text="${row.usuarioRegistro.sector.nombre}"></td>
 
 				<td>  <a th:href="@{/prestamista/desaprobarEstadoSolicitud(codigo=${row.id}     )}" class="btn btn-danger btn-eliminar" onclick="return confirm('¿Está seguro de Desaprobar esta solicitud?');">DESAPROBAR</a> </td>
-				<td>  <a th:href="@{/prestamista/aprobarEstadoSolicitud(codigo=${row.id}, montodiario=${row.pagoDiario} ,idusu=${row.usuarioRegistro.id},fec1=${row.fechaInicio},fec2=${row.fechaFin})}" class="btn btn-info btn-editar" onclick="return confirm('¿Está seguro de Aprobar esta solicitud?');">APROBAR</a> </td>
+				<td>  <a th:href="@{/prestamista/aprobarEstadoSolicitud(codigo=${row.id}, montodiario=${row.pagoDiario} ,
+					idusu=${row.usuarioRegistro.id},fec1=${row.fechaInicio},fec2=${row.fechaFin},idsoli=${row.id} )}"
+					
+					 class="btn btn-info btn-editar" onclick="return confirm('¿Está seguro de Aprobar esta solicitud?');">APROBAR</a> </td>
 
 
 			<tbody>

@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import pe.edu.cibertec.entity.Pagos;
 import pe.edu.cibertec.entity.Solicitud;
 
 public interface SolicitudRepository extends JpaRepository<Solicitud, Integer> {
 
-	@Query("select s from Solicitud s where s.usuarioRegistro.sector.id=?1 ")
-	public List<Solicitud> listaSolicitudesPorSector(int d);
+	@Query("select s from Solicitud s where s.usuarioRegistro.sector.id=?1 and s.usuarioRegistro.idUsuarioRegistra = ?2")
+	public List<Solicitud> listaSolicitudesPorSector(int idSector , int usuRegistra);
 	
 	
 	@Modifying
@@ -25,6 +26,8 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Integer> {
 	@Query("SELECT s FROM Solicitud s WHERE s.usuarioRegistro.id = ?1")
 	public List<Solicitud> listaSolicitudesPorUsuario(Integer usuarioId);
 	
+	@Query("select s from Solicitud s where s.usuarioRegistro.id=?1 and  s.estado= 'APROBADO'")
+	public List<Solicitud> solicitudesaprobadas(Integer d);
 	
 	
 	
